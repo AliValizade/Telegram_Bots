@@ -6,6 +6,14 @@ from Models.TodoList import todo_list
 
 class TodoController:
     @staticmethod
+    async def start(update:Update, context: ContextTypes.DEFAULT_TYPE):
+        await update.message.reply_text('Welcome to TODOList bot, Please send /help command to help you.')
+
+    @staticmethod
+    async def help(update:Update, context: ContextTypes.DEFAULT_TYPE):
+        await update.message.reply_text('/add + (task name), to add your task.\n/list , to view tasks list.\n/check (i), to check the task(i) as done.\n/clear , to delete all tasks.')
+
+    @staticmethod
     async def add_todo(update:Update, context: ContextTypes.DEFAULT_TYPE):
         command = update.message.text.split()[0]
         title = " ".join(update.message.text.split(command)[1:] )

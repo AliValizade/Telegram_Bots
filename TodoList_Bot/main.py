@@ -7,6 +7,8 @@ from Controllers.TodoController import TodoController
 TOKEN = config('TOKEN')
 application = ApplicationBuilder().token(TOKEN).build()
 
+application.add_handler(CommandHandler('start', TodoController.start))
+application.add_handler(CommandHandler('help', TodoController.help))
 application.add_handler(CommandHandler('add', TodoController.add_todo))
 application.add_handler(CommandHandler('list', TodoController.list_todos))
 application.add_handler(CommandHandler('check', TodoController.check_todo))
