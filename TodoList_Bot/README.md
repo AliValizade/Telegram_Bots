@@ -1,4 +1,4 @@
-# TODO-List Telegram Bot with Python-telegram-bot
+# TODO-List Bot with Python-telegram-bot
 
 ## Commands:
 - <B>/add taskName </B> (to add a task)
