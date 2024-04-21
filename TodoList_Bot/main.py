@@ -8,6 +8,7 @@ TOKEN = config('TOKEN')
 application = ApplicationBuilder().token(TOKEN).build()
 
 application.add_handler(CommandHandler('add', TodoController.add_todo))
-
+application.add_handler(CommandHandler('list', TodoController.list_todos))
+application.add_handler(CommandHandler('check', TodoController.check_todo))
 
 application.run_polling(allowed_updates=Update.ALL_TYPES)

@@ -21,3 +21,12 @@ class TodoController:
         for i, todo in enumerate(todo_list):
             answer = answer + f"{i + 1} - {'✅' if todo.is_completed else '⭕'} {todo.title}\n"
         await update.message.reply_text(answer)
+
+    @staticmethod
+    async def check_todo(update:Update, context:ContextTypes.DEFAULT_TYPE):
+        index = int(context.args[0])
+        if index > len(todo_list) or index <= 0:
+            await update.message.reply_text('ERROR: The task no exist.')
+            return
+        todo_list[index - 1].set_completed()
+        await update.message.reply_text(f'The task {index} done.')
