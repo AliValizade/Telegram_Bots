@@ -1,8 +1,6 @@
 from telegram import Update
-from telegram.ext import filters, ConversationHandler, \
-CommandHandler, MessageHandler, ContextTypes
+from telegram.ext import filters, ConversationHandler, CommandHandler, MessageHandler, ContextTypes
 
-""" Controller with Conversation Handler """
 
 USERNAME, INFO, PHOTO = range(3)
 
