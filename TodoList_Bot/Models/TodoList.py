@@ -1,5 +1,5 @@
 from Models.Todo import Todo
 
-todo_list: list[Todo] = []
-
+# Dictionary to hold todo lists for each user
+user_todo_lists = {}
 
