@@ -15,7 +15,22 @@ markup.add(first_button, second_button)
 def send_welcome(message):
     bot.send_message(message.chat.id, 'Hi', reply_markup=markup)
 
+key_markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+key_markup.add('One', 'Two', 'Three')
 
+
+@bot.message_handler(commands=['help'])
+def help_me(message):
+    bot.reply_to(message, 'What can I do?', reply_markup=key_markup)
+
+@bot.message_handler()
+def keyboard(message):
+    if message.text == 'One':
+        bot.send_message(message.chat.id, 'You tapped on One button.')
+    elif message.text == 'Two':
+        bot.send_message(message.chat.id, 'You tapped on Two button.')
+    elif message.text == 'Three':
+        bot.send_message(message.chat.id, 'You tapped on Three button.')
 
 
 bot.infinity_polling()
