@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import telebot
+from telebot import types
 
 load_dotenv()
 TOKEN = os.environ.get("TOKEN")
@@ -60,5 +61,15 @@ def tall(message):
     tal = message.text
     msg = bot.send_message(message.chat.id, f'Your name: {nm}\nAge: {ag}\nTall: {tal}')
 
+@bot.message_handler(commands=['get'])
+def get_number(m):
+    markup = types.KeyboardButton(resize_keyboard=True, row_width=1)
+    button = types.KeyboardButton(text='ارسال شماره', request_contact=True) # request_location & request_poll exist too.
+    markup.add(button)
+    bot.send_message(m.chat.id, 'لطفا شماره خود را ارسال کنید:')
+
+@bot.message_handler(content_types=['contact'])
+def contact(m):
+    print(m.contact)
 
 bot.infinity_polling()
