@@ -1,4 +1,5 @@
 import os
+import time
 from dotenv import load_dotenv
 import telebot
 from telebot import types
@@ -31,7 +32,9 @@ def callback(call):
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, 'Hi', reply_markup=markup)
+    bot.send_chat_action(message.chat.id, action='typing') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    time.sleep(2)
+    bot.send_message(message.chat.id, 'سلام، به ربات ما خوش آمدید.', reply_markup=markup)
 
 
 @bot.message_handler(commands=['help'])
@@ -71,5 +74,31 @@ def get_number(m):
 @bot.message_handler(content_types=['contact'])
 def contact(m):
     print(m.contact)
+
+@bot.message_handler(commands=['pic'])  
+def send_photo(message):
+    bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    time.sleep(2)
+    bot.send_photo(message.chat.id, open('data/ali.jpg', 'rb'))
+    # bot.send_video(message.chat.id, open('data/ali.mp4', 'rb'))
+    # bot.send_document(message.chat.id, open('data/requirements.txt', 'r'))
+    # bot.send_audio(message.chat.id, open('data/ali.mp3', 'rb'))
+
+media = []
+@bot.message_handler(commands=['photos'])  
+def send_photo(message):
+    p1 = types.InputMediaPhoto(open('data/ali.jpg', 'rb'))
+    p2 = types.InputMediaPhoto(open('data/650.JPG', 'rb'))
+    media.append(p1)
+    media.append(p2)
+    bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    time.sleep(2)
+    bot.send_media_group(message.chat.id, media=media)
+
+
+
+
+
+
 
 bot.infinity_polling()
