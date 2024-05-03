@@ -107,6 +107,7 @@ def send_photo(message):
 
 first_photo = open('data/ali.jpg', 'rb')
 second_photo = open('data/650.JPG', 'rb')
+
 @bot.message_handler(commands=['editcaption'])
 def send_photo(message):
     bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
@@ -115,8 +116,6 @@ def send_photo(message):
     time.sleep(3)
     bot.edit_message_caption(chat_id=message.chat.id, message_id=m.message_id, caption='edited')
 
-first_photo = open('data/ali.jpg', 'rb')
-second_photo = open('data/650.JPG', 'rb')
 @bot.message_handler(commands=['editphoto'])
 def send_photo(message):
     bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
@@ -124,6 +123,32 @@ def send_photo(message):
     time.sleep(3)
     bot.edit_message_media(chat_id=message.chat.id, message_id=m.message_id,media=types.InputMediaPhoto(second_photo, caption='عکس ویرایش شد'))
 
+
+key1 = types.InlineKeyboardMarkup()
+btn1 = types.InlineKeyboardButton('دکمه 1', callback_data='btn1')
+key1.add(btn1)
+
+@bot.message_handler(commands=['editbtn'])
+def send_photo(message):
+    bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    time.sleep(2)
+    m = bot.send_photo(message.chat.id, photo=first_photo, caption='متن اولیه', reply_markup=key1)
+    global mid
+    mid = m.message_id
+    time.sleep(3)
+
+key2 = types.InlineKeyboardMarkup()
+btn2 = types.InlineKeyboardButton('دکمه جدید', callback_data='btn2')
+key2.add(btn2)
+
+@bot.callback_query_handler(func=lambda call: call.data == 'btn1')
+def change(call):
+    bot.edit_message_reply_markup(chat_id=call.message.chat.id, message_id=mid, reply_markup=key2)
+
+    time.sleep(3)
+
+    bot.delete_message(chat_id=call.message.chat.id, message_id=mid)
+    bot.send_message(chat_id=call.message.chat.id, text='پیام حذف شد')
 
 
 bot.infinity_polling()
