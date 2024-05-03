@@ -62,31 +62,31 @@ def age(message):
 
 def tall(message):
     tal = message.text
-    msg = bot.send_message(message.chat.id, f'Your name: {nm}\nAge: {ag}\nTall: {tal}')
+    bot.send_message(message.chat.id, f'Your name: {nm}\nAge: {ag}\nTall: {tal}')
 
 @bot.message_handler(commands=['get'])
 def get_number(m):
-    markup = types.KeyboardButton(resize_keyboard=True, row_width=1)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     button = types.KeyboardButton(text='ارسال شماره', request_contact=True) # request_location & request_poll exist too.
     markup.add(button)
-    bot.send_message(m.chat.id, 'لطفا شماره خود را ارسال کنید:')
+    bot.send_message(m.chat.id, 'لطفا شماره خود را ارسال کنید:', reply_markup=markup)
 
-@bot.message_handler(content_types=['contact'])
+@bot.message_handler(content_types=['contact']) # content_types = 'photo' & 'text' & 'video' & 'audio' & 'document' & 'location'
 def contact(m):
     print(m.contact)
 
 @bot.message_handler(commands=['pic'])  
-def send_photo(message):
+def send_pic(message):
     bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
     time.sleep(2)
-    bot.send_photo(message.chat.id, open('data/ali.jpg', 'rb'))
+    bot.send_photo(message.chat.id, open('data/ali.jpg', 'rb'), caption='متن اولیه')
     # bot.send_video(message.chat.id, open('data/ali.mp4', 'rb'))
     # bot.send_document(message.chat.id, open('data/requirements.txt', 'r'))
     # bot.send_audio(message.chat.id, open('data/ali.mp3', 'rb'))
 
 media = []
 @bot.message_handler(commands=['photos'])  
-def send_photo(message):
+def send_medias(message):
     p1 = types.InputMediaPhoto(open('data/ali.jpg', 'rb'))
     p2 = types.InputMediaPhoto(open('data/650.JPG', 'rb'))
     media.append(p1)
@@ -96,8 +96,33 @@ def send_photo(message):
     bot.send_media_group(message.chat.id, media=media)
 
 
+@bot.message_handler(commands=['edittext'])  
+def send_photo(message):
+    bot.send_chat_action(message.chat.id, action='typing') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    time.sleep(2)
+    m = bot.send_message(message.chat.id, 'این متن اولیه است')
+    time.sleep(3)
+    bot.edit_message_text(chat_id=message.chat.id, message_id=m.message_id, text='متن ادیت شد')
 
 
+first_photo = open('data/ali.jpg', 'rb')
+second_photo = open('data/650.JPG', 'rb')
+@bot.message_handler(commands=['editcaption'])
+def send_photo(message):
+    bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    time.sleep(2)
+    m = bot.send_photo(message.chat.id, photo=first_photo, caption='متن اولیه')
+    time.sleep(3)
+    bot.edit_message_caption(chat_id=message.chat.id, message_id=m.message_id, caption='edited')
+
+first_photo = open('data/ali.jpg', 'rb')
+second_photo = open('data/650.JPG', 'rb')
+@bot.message_handler(commands=['editphoto'])
+def send_photo(message):
+    bot.send_chat_action(message.chat.id, action='upload_photo') # action= 'upload_video' & 'upload_photo' & 'upload_audio' & 'record_video' & 'recordd_audio'
+    m = bot.send_photo(message.chat.id, photo=first_photo, caption='متن اولیه')
+    time.sleep(3)
+    bot.edit_message_media(chat_id=message.chat.id, message_id=m.message_id,media=types.InputMediaPhoto(second_photo, caption='عکس ویرایش شد'))
 
 
 
