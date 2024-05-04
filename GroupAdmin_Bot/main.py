@@ -41,7 +41,7 @@ def start(m):
     bot.send_message(m.chat.id, text7, parse_mode='MarkdownV2')
     bot.send_message(m.chat.id, text8, parse_mode='MarkdownV2', disable_web_page_preview=True)
 
-
+# Welcome to new user
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome(m):
     bot.reply_to(m, f'کاربر {m.from_user.first_name} به گروه خوش آمدی')
@@ -52,11 +52,14 @@ def approve(r):
     text = f'<i>کاربر {r.from_user.first_name} به گروه پیوست.</i>'
     bot.send_message(r.chat.id, text, parse_mode='HTML')
 
+# Pin message
 @bot.message_handler(func=lambda m: m.text == 'پین')
 def pin(m):
     bot.pin_chat_message(m.chat.id, m.reply_to_message.id)
     bot.reply_to(m, 'پیام موردنظر پین شد')
 
+
+# Add admin
 @bot.message_handler(func=lambda m: m.text == 'افزودن ادمین')
 def promote(m):
     bot.promote_chat_member(
@@ -76,6 +79,8 @@ def promote(m):
         can_manage_topics= False,
     )
 
+
+# Banning user
 @bot.message_handler(func=lambda m: m.text.startwith('بن'))
 def ban(m):
     duration = int(m.text.split()[-1])
@@ -94,6 +99,8 @@ def ban(m):
     bot.kick_chat_member(m.chat.id, m.reply_to_message.from_user.id, until_date=5, revoke_messages=True)
     bot.reply_to(m, f'کاربر {m.reply_to_message.from_user.id} بن موقت شد')
 
+
+# Silenting User
 @bot.message_handler(func=lambda m: m.text.startwith('سکوت'))
 def restrict(m):
     duration = int(m.text.split()[-1])
@@ -126,5 +133,27 @@ def derestrict(m):
                             )
     bot.reply_to(m, f'کاربر {m.reply_to_message.from_user.id} حذف سکوت شد')
 
+# Admin list
+@bot.message_handler(commands=['admin'])
+def get_admin(m):
+    admin_list = bot.get_chat_administrators(m.chat.id)
+    a = bot.get_chat(m.chat.id)
+    b = bot.get_chat_member(chat_id=m.chat.id, user_id=m.from_user.id)
+    c = bot.get_chat_member_count(m.chat.id)
+    d = bot.get_chat_members_count(m.chat.id)
+    for i in admin_list:
+        print(i.user.first_name)
+    
+    print('-----------------')
+    print(a)
+    
+    print('-----------------')
+    print(b)
+    
+    print('-----------------')
+    print(c)
+    
+    print('-----------------')
+    print(d)
 
 bot.infinity_polling()
