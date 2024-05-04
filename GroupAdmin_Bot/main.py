@@ -1,12 +1,45 @@
 import os
-import time
+import datetime
 from dotenv import load_dotenv
 import telebot
-from telebot import types
 
 load_dotenv()
 TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
+
+"""
+Text formatting (parse_mode='HTML')
+Bold: <b>your text</b>
+Italic: <i>your text</i>
+Mono: <code>your text</code>
+Endline: <ins>your text</ins>
+Stric: <s>your text</s>
+
+Text formatting (parse_mode='MarkdownV2')
+Spoiler: ||your text||
+Bold: **your text**
+Link: [text](link address)
+"""
+
+@bot.message_handler(commands=['start'])
+def start(m):
+    text1 = '<b>این متن بولد است</b>'
+    text2 = '<i>این متن ایتالیک است</i>'
+    text3 = '<code>این متن مونو است</code>'
+    text4 = '<ins>این متن آندرلاین است</ins>'
+    text5 = '<s>این متن استریک است</s>'
+    text6 = '||این متن اسپویلر است||'
+    text7 = '**این متن بولد است**'
+    text8 = '[این متن لینک است](https://www.varzesh3.com/)'
+
+    bot.send_message(m.chat.id, text1, parse_mode='HTML')
+    bot.send_message(m.chat.id, text2, parse_mode='HTML')
+    bot.send_message(m.chat.id, text3, parse_mode='HTML')
+    bot.send_message(m.chat.id, text4, parse_mode='HTML')
+    bot.send_message(m.chat.id, text5, parse_mode='HTML')
+    bot.send_message(m.chat.id, text6, parse_mode='MarkdownV2')
+    bot.send_message(m.chat.id, text7, parse_mode='MarkdownV2')
+    bot.send_message(m.chat.id, text8, parse_mode='MarkdownV2', disable_web_page_preview=True)
 
 
 @bot.message_handler(content_types=['new_chat_members'])
@@ -16,7 +49,8 @@ def welcome(m):
 @bot.chat_join_request_handler(func=lambda r:True)
 def approve(r):
     bot.approve_chat_join_request(chat_id=r.chat.id, user_id=r.from_user.id )
-    bot.send_message(r.chat.id, f'کاربر {r.from_user.first_name} به گروه پیوست.')
+    text = f'<i>کاربر {r.from_user.first_name} به گروه پیوست.</i>'
+    bot.send_message(r.chat.id, text, parse_mode='HTML')
 
 @bot.message_handler(func=lambda m: m.text == 'پین')
 def pin(m):
@@ -42,10 +76,13 @@ def promote(m):
         can_manage_topics= False,
     )
 
-@bot.message_handler(func=lambda m: m.text == 'بن')
+@bot.message_handler(func=lambda m: m.text.startwith('بن'))
 def ban(m):
-    bot.ban_chat_member(m.chat.id, m.reply_to_message.from_user.id)
-    bot.reply_to(m, f'کاربر {m.reply_to_message.from_user.id} بن شد')
+    duration = int(m.text.split()[-1])
+    date = datetime.datetime.now() + datetime.timedelta(minutes=duration)
+    until_date = int(date.timestamp())
+    bot.ban_chat_member(m.chat.id, m.reply_to_message.from_user.id, until_date=until_date)
+    bot.reply_to(m, f'کاربر {m.reply_to_message.from_user.id} بن {duration} شد')
 
 @bot.message_handler(func=lambda m: m.text == 'حذف بن')
 def ban(m):
@@ -57,9 +94,12 @@ def ban(m):
     bot.kick_chat_member(m.chat.id, m.reply_to_message.from_user.id, until_date=5, revoke_messages=True)
     bot.reply_to(m, f'کاربر {m.reply_to_message.from_user.id} بن موقت شد')
 
-@bot.message_handler(func=lambda m: m.text == 'سکوت')
+@bot.message_handler(func=lambda m: m.text.startwith('سکوت'))
 def restrict(m):
-    bot.restrict_chat_member(m.chat.id, m.reply_to_message.from_user.id, until_date=10,
+    duration = int(m.text.split()[-1])
+    date = datetime.datetime.now() + datetime.timedelta(minutes=duration)
+    until_date = int(date.timestamp())
+    bot.restrict_chat_member(m.chat.id, m.reply_to_message.from_user.id, until_date=until_date,
                              can_send_messages= False, 
                              can_send_media_messages= False, 
                              can_send_polls= False, 
