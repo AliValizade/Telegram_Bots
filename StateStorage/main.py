@@ -45,6 +45,8 @@ def age(m):
     with bot.retrieve_data(m.from_user.id, m.chat.id) as data:
         bot.send_message(m.chat.id, f"اسم شما: {data['first_name']}\nفامیلی شما: {data['last_name']}\nسن شما: {m.text}")
 
+    bot.delete_state(m.from_user.id, m.chat.id)
+
 bot.add_custom_filter(custom_filters.StateFilter(bot))
 
 
