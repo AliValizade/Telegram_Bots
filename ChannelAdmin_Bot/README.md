@@ -1,4 +1,4 @@
-# Group-Admin Bot with PyTelegramBotAPI
+# Channel-Admin Bot with PyTelegramBotAPI
 
 ## Commands:
 - <B>/start </B> (to start bot)
