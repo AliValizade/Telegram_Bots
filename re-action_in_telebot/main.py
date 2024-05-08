@@ -54,6 +54,17 @@ def start6(m):
     # print(m.message_id)
 
 
+
+# Blockquote
+text = """<blockquote>It's Blockquote</blockquote>
+<pre>It's a code</pre>
+<pre><code class="language-python">It's code with lang</code></pre>
+""" 
+@bot.message_handler(commands=['start7'])
+def start7(m):
+    bot.send_message(chat_id=m.chat.id, text=text, parse_mode='HTML')
+
+
 @bot.message_reaction_handler()
 def reaction(r):
     print(r.chat.first_name, r.chat.last_name)
