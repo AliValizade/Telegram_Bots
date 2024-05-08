@@ -11,19 +11,19 @@ bot = TeleBot(token=TOKEN)
 
 # Re-action to command and send message
 @bot.message_handler(commands=['start1'])
-def start(m):
+def start1(m):
     bot.send_message(chat_id=m.chat.id, text='Hello my dear, welcome to my bot.')
     bot.set_message_reaction(chat_id=m.chat.id, message_id=m.message_id, reaction=[ReactionTypeEmoji(emoji='😍')])
 
 # Reply to message in another chat
 @bot.message_handler(commands=['start2'])
-def start(m):
+def start2(m):
     bot.send_message(chat_id=-1002035951847, text='Hello my dear.', reply_parameters=ReplyParameters(message_id=m.message_id, chat_id=m.chat.id))
 
 
 # Customize link preview
 @bot.message_handler(commands=['start3'])
-def start(m):
+def start3(m):
     bot.send_message(
         chat_id=m.chat.id, 
         text='Hello my dear.\n\nhttps://t.me/Remote_project_bot', 
@@ -35,6 +35,12 @@ def start(m):
         )
     )
     
+
+# Forward multiple messages together
+@bot.message_handler(commands=['start4'])
+def start4(m):
+    bot.forward_messages(chat_id=m.chat.id,from_chat_id='@remote_ad', message_ids=[11, 13])
+
 
 
 @bot.message_reaction_handler()
