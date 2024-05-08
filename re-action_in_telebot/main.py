@@ -42,6 +42,12 @@ def start4(m):
     bot.forward_messages(chat_id=m.chat.id,from_chat_id='@remote_ad', message_ids=[11, 13])
 
 
+# Copy multiple messages together
+@bot.message_handler(commands=['start5'])
+def start5(m):
+    bot.copy_messages(chat_id=m.chat.id,from_chat_id='@remote_ad', message_ids=[11, 13])
+
+
 
 @bot.message_reaction_handler()
 def reaction(r):
