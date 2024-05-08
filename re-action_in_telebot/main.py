@@ -47,6 +47,11 @@ def start4(m):
 def start5(m):
     bot.copy_messages(chat_id=m.chat.id,from_chat_id='@remote_ad', message_ids=[11, 13])
 
+# Delete multiple messages together
+@bot.message_handler(commands=['start6'])
+def start6(m):
+    bot.delete_messages(chat_id=m.chat.id, message_ids=[33, 34, 35])
+    # print(m.message_id)
 
 
 @bot.message_reaction_handler()
