@@ -70,6 +70,20 @@ def download_media(message: Message):
             newfile.write(d_path)
 
     
+# Get Admins-list of telegram groups or channels
+@bot.message_handler(commands=['admins'])
+def admins(message: Message):
+    received_list = bot.get_chat_administrators(message.chat.id)
+    admins_list = [item.user.first_name for item in received_list]
+    print(admins_list)
+    print('============')
+
+@bot.message_handler(commands=['bloggertype'])
+def admins(message: Message):
+    blogger_type = bot.get_chat_member(message.chat.id, message.from_user.id)
+    print(blogger_type.status)
+
+
 
 
 
